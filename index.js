@@ -3,7 +3,7 @@ const path = require("path");
 const arg = require("arg");
 const { default: fetch } = require("node-fetch");
 const { RateLimiter } = require("limiter");
-//const convert = require("gd-level-to-json");
+const convert = require("gd-level-to-json");
 
 const limiter = new RateLimiter({
 	tokensPerInterval: 100,

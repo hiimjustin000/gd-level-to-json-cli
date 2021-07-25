@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "arg": "^5.0.0",
+    "gd-level-to-json": "^1.0.0",
     "limiter": "^2.1.0",
     "node-fetch": "^2.6.1"
   }
