@@ -5,14 +5,14 @@
 
 Convert a Geometry Dash level's data to a readable JSON format.
 
-![npm](https://img.shields.io/npm/v/gd-level-to-json-cli)
-![npm](https://img.shields.io/npm/dt/gd-level-to-json-cli)
-![NPM](https://img.shields.io/npm/l/gd-level-to-json-cli)
+[![npm](https://img.shields.io/npm/v/gd-level-to-json-cli)](https://npm.im/gd-level-to-json-cli)
+[![npm](https://img.shields.io/npm/dt/gd-level-to-json-cli)](https://npm.im/gd-level-to-json-cli)
+[![NPM](https://img.shields.io/npm/l/gd-level-to-json-cli)](https://npm.im/gd-level-to-json-cli)
 
 # Features
 GD Level to JSON CLI has the same features as GD Level to JSON, but as a command-line interface!
 ```
-$ leveltojson     
+$ leveltojson
   _                   _   _              _ ____   ___  _   _ 
  | |    _____   _____| | | |_ ___       | / ___| / _ \| \ | |
  | |   / _ \ \ / / _ \ | | __/ _ \   _  | \___ \| | | |  \| |
@@ -25,14 +25,21 @@ Format: leveltojson (options)
 
 Options:
 --------------------------------------------------------------------------------
+Output
+--output (-o): The optional path to an output level JSON file.
+--------------------------------------------------------------------------------
 Local
---file (-f): The full path to a level text file.
+--file (-f): The path to a level text file.
 --------------------------------------------------------------------------------
 Online
 --id (-i): The ID of the level you are getting the data of.
 --server (-s): The optional endpoint to a Geometry Dash server. (With http://)
 --------------------------------------------------------------------------------
 ```
+
+# Special Thanks
+[Colon](https://github.com/GDColon) - I copied some things from GDBrowser but whatever\
+[AlFas](https://github.com/AlFasGD) - for GDAPI
 
 # License
 This package is licensed under the [MIT License](./LICENSE).
