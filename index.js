@@ -48,59 +48,68 @@ async function getLevelFromID(id, server) {
 }
 
 async function cli(argv) {
-	let args = arg({
-		"--file": String,
-		"--id": String,
-		"--server": String,
-		"-f": "--file",
-		"-i": "--id",
-		"-s": "--server",
-	}, { argv });
-
-	let options = {
-		file: args["--file"],
-		id: args["--id"],
-		server: args["--server"],
-	}
-
-	if (!argv[0]) {
-		return console.log([
-			"  _                   _   _              _ ____   ___  _   _ \n | |    _____   _____| | | |_ ___       | / ___| / _ \\| \\ | |\n | |   / _ \\ \\ / / _ \\ | | __/ _ \\   _  | \\___ \\| | | |  \\| |\n | |__|  __/\\ V /  __/ | | || (_) | | |_| |___) | |_| | |\\  |\n |_____\\___| \\_/ \\___|_|  \\__\\___/   \\___/|____/ \\___/|_| \\_|",
-			"",
-			"Convert a Geometry Dash level's data to a readable JSON format.",
-			"",
-			"Format: leveltojson (options)",
-			"",
-			"Options:",
-			"--------------------------------------------------------------------------------",
-			"Local",
-			"--file (-f): The full path to a level text file.",
-			"--------------------------------------------------------------------------------",
-			"Online",
-			"--id (-i): The ID of the level you are getting the data of.",
-			"--server (-s): The optional endpoint to a Geometry Dash server. (With http://)",
-			"--------------------------------------------------------------------------------"
-		].join("\n"));
-	}
-
-	if ((options.file && options.id) || (options.file && options.server))
-		return console.log("You cannot have local and online options at the same time.");
-
-	let data;
 	try {
-		data = options.id ? convert(await getLevelFromID(options.id, options.server ? options.server : "http://www.boomlings.com/database")) : convert(fs.readFileSync(path.resolve(options.file)).toString());
+		let args = arg({
+			"--output": String,
+			"--file": String,
+			"--id": String,
+			"--server": String,
+			"-o": "--output",
+			"-f": "--file",
+			"-i": "--id",
+			"-s": "--server",
+		}, { argv });
+
+		let options = {
+			output: args["--output"],
+			file: args["--file"],
+			id: args["--id"],
+			server: args["--server"],
+		}
+
+		if (!argv[0]) {
+			return console.log([
+				"  _                   _   _              _ ____   ___  _   _ ",
+				" | |    _____   _____| | | |_ ___       | / ___| / _ \\| \\ | |",
+				" | |   / _ \\ \\ / / _ \\ | | __/ _ \\   _  | \\___ \\| | | |  \\| |",
+				" | |__|  __/\\ V /  __/ | | || (_) | | |_| |___) | |_| | |\\  |",
+				" |_____\\___| \\_/ \\___|_|  \\__\\___/   \\___/|____/ \\___/|_| \\_|",
+				"",
+				"Convert a Geometry Dash level's data to a readable JSON format.",
+				"",
+				"Format: leveltojson (options)",
+				"",
+				"Options:",
+				"--------------------------------------------------------------------------------",
+				"Output",
+				"--output (-o): The optional path to an output level JSON file.",
+				"--------------------------------------------------------------------------------",
+				"Local",
+				"--file (-f): The path to a level text file.",
+				"--------------------------------------------------------------------------------",
+				"Online",
+				"--id (-i): The ID of the level you are getting the data of.",
+				"--server (-s): The optional endpoint to a Geometry Dash server. (With http://)",
+				"--------------------------------------------------------------------------------"
+			].join("\n"));
+		}
+
+		if (options.file && (options.id || options.server))
+			return console.log("You cannot have local and online options at the same time.");
+
+		let data = options.id ? convert(await getLevelFromID(options.id, options.server ? options.server : "http://www.boomlings.com/database")) : convert(fs.readFileSync(path.resolve(options.file)).toString());
+
+		if (data == "-1")
+			return console.log("An error occured while retrieving level data.");
+
+		if (data == "-2")
+			return console.log("You are being rate limited.");
+
+		fs.writeFileSync(options.output ? path.resolve(options.output) : path.resolve(process.cwd(), "level.json"), JSON.stringify(data, null, "\t"));
+		console.log("Data written to " + (options.output ? path.resolve(options.output) : path.resolve(process.cwd(), "level.json")) + ".");
 	} catch {
-		return console.log("An error occured while retrieving level data.");
+		console.log("An error occured! Please try again.");
 	}
-
-	if (data == "-1")
-		return console.log("An error occured while retrieving level data.");
-
-	if (data == "-2")
-		return console.log("You are being rate limited.");
-
-	fs.writeFileSync(path.resolve(process.cwd(), "level.json"), JSON.stringify(data, null, "\t"));
-	console.log("Data written to " + path.resolve(process.cwd(), "level.json") + ".");
 }
 
 module.exports = cli;
